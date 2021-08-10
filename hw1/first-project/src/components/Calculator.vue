@@ -31,7 +31,7 @@
 export default {
   name: "Calculator",
   data: () => ({
-    message: "Hello Vue",
+    message: "Enter two numbers",
     operand1: 0,
     operand2: 0,
     result: 0,
