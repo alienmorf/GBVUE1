@@ -2,27 +2,21 @@
   <div class="calc">
     {{ message }}
     <div>
-      <input
-        type="number"
-        placeholder="Operand1"
-        v-on:focus="onFocus"
-        v-model.number="operand1"
-      />
+      <input type="number" placeholder="Operand1" v-model.number="operand1" />
       <div>
-        <button @click="result = operand1 + operand2">+</button>
-        <button @click="dif">-</button>
-        <button @click="result = operand1 * operand2">*</button>
-        <button @click="div(operand1, operand2)">/</button>
-        <button @click="multi(operand1, operand2)">^</button>
-        <button @click="divf(operand1, operand2)">//</button>
+        <button @click="calculate('+')">+</button>
+        <button @click="calculate('-')">-</button>
+        <button @click="calculate('*')">*</button>
+        <button @click="calculate('/')">/</button>
+        <button @click="calculate('^')">^</button>
+        <button @click="calculate('//')">//</button>
       </div>
-      <input
-        type="number"
-        placeholder="Operand2"
-        @:keyup="onKeyUp"
-        v-model.number="operand2"
-      />
+      <input type="number" placeholder="Operand2" v-model.number="operand2" />
       <div>= {{ result }}</div>
+      <div v-if="!!error">
+        Ошибка:
+        {{ error }}
+      </div>
     </div>
   </div>
 </template>
@@ -35,28 +29,62 @@ export default {
     operand1: 0,
     operand2: 0,
     result: 0,
+    error: "",
   }),
   methods: {
-    doThan(text, event) {
-      console.log(text, event);
+    calculate(operation = "+") {
+      this.error = "";
+      switch (operation) {
+        case "+":
+          this.sum();
+          break;
+        case "-":
+          this.sub();
+          break;
+        case "*":
+          this.mult();
+          break;
+        case "/":
+          this.div();
+          break;
+        case "^":
+          this.exp();
+          break;
+        case "//":
+          this.intDiv();
+          break;
+
+        default:
+          break;
+      }
     },
-    dif() {
+
+    sum() {
+      this.result = this.operand1 + this.operand2;
+    },
+    sub() {
       this.result = this.operand1 - this.operand2;
     },
-    multi(op1, op2) {
-      this.result = Math.pow(op1, op2);
+    mult() {
+      this.result = this.operand1 * this.operand2;
     },
-    div(op1, op2) {
-      this.result = op1 / op2;
+    div() {
+      const { operand1, operand2 } = this;
+      if (operand2 === 0) {
+        this.error = "На 0 делить нельзя";
+      } else {
+        this.result = operand1 / operand2;
+      }
     },
-    divf(op1, op2) {
-      this.result = Math.floor(op1 / op2);
+    exp() {
+      this.result = Math.pow(this.operand1, this.operand2);
     },
-    onFocus() {
-      console.log("onFocus");
-    },
-    onKeyUp() {
-      console.log("onKeyUp");
+    intDiv() {
+      if (this.operand2 === 0) {
+        this.error = "На 0 делить нельзя";
+      } else {
+        this.result = Math.floor(this.operand1 / this.operand2);
+      }
     },
   },
 };
