@@ -1,25 +1,65 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to My Calculator" />
-    <Calculator />
+    <div :class="[$style.wrapper]">
+      <header>
+        <div :class="[$style.title]">My Personal Costs</div>
+      </header>
+      <div :class="[$style.content]">
+        <payments-display :list="paymentList" />
+      </div>
+      <div :class="[$style.content]" v-if="showForm">
+        <add-payment-form @addNewPayment="addData" />
+      </div>
+      <div :class="[$style.content]">
+        <button @click="showForm = !showForm">ADD NEW COST +</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-import Calculator from "./components/Calculator";
-
+import AddPaymentForm from "./components/AddPaymentForm.vue";
+import PaymentsDisplay from "./components/PaymentsDisplay.vue";
 export default {
   name: "App",
-  components: {
-    HelloWorld,
-    Calculator,
+  components: { PaymentsDisplay, AddPaymentForm },
+  data() {
+    return {
+      paymentList: [],
+      showForm: false,
+    };
+  },
+  methods: {
+    addData(newPayment) {
+      this.paymentList.push(newPayment);
+    },
+    fetchData() {
+      return [
+        {
+          date: "01.01.2021",
+          category: "Food",
+          value: 178,
+        },
+        {
+          date: "02.01.2021",
+          category: "Transport",
+          value: 320,
+        },
+        {
+          date: "03.01.2021",
+          category: "Food",
+          value: 530,
+        },
+      ];
+    },
+  },
+  created() {
+    this.paymentList = this.fetchData();
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" module>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -27,5 +67,15 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.wrapper {
+  display: block;
+  height: 100%;
+}
+.title {
+  font-size: 30px;
+}
+.content {
+  padding-top: 30px;
 }
 </style>
