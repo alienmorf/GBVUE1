@@ -1,8 +1,14 @@
 <template>
   <div class="list">
-    <div class="item" v-for="(item, idx) in list" :key="idx">
-      {{ idx + 1 }} - {{ item }}
-    </div>
+    <table class="item" v-for="(item, idx) in list" :key="idx">
+      <tr>
+        <td class="row">{{ idx + 1 }}</td>
+        <td class="row">{{ item.date }}</td>
+        <td class="row">{{ item.category }}</td>
+        <td class="row">{{ item.value }}</td>
+      </tr>
+      <!-- {{ idx + 1 }} - {{ item }} -->
+    </table>
   </div>
 </template>
 
@@ -16,4 +22,8 @@ export default {
 </script>
 
 <style>
+.row {
+  padding-left: 50px;
+  text-align: center;
+}
 </style>

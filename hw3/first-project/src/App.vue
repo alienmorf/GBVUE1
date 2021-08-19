@@ -10,7 +10,7 @@
       <div :class="[$style.content]" v-if="showForm">
         <add-payment-form @addNewPayment="addData" />
       </div>
-      <div :class="[$style.content]">
+      <div :class="[$style.addButton]">
         <button @click="showForm = !showForm">ADD NEW COST +</button>
       </div>
     </div>
@@ -77,5 +77,11 @@ export default {
 }
 .content {
   padding-top: 30px;
+}
+.addButton {
+  padding-top: 30px;
+}
+.row {
+  font-size: 30px;
 }
 </style>
