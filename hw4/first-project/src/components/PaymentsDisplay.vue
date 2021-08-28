@@ -2,7 +2,7 @@
   <div class="list">
     <table class="item" v-for="(item, idx) in list" :key="idx">
       <tr>
-        <td class="row">{{ idx + 1 }}</td>
+        <td class="row">{{ item.id }}</td>
         <td class="row">{{ item.date }}</td>
         <td class="row">{{ item.category }}</td>
         <td class="row">{{ item.value }}</td>

@@ -5,7 +5,14 @@
         <div :class="[$style.title]">My Personal Costs</div>
       </header>
       <div :class="[$style.content]">
-        <payments-display :list="paymentList" />
+        total Value: {{ getFPV }}
+        <payments-display :list="currentEl" />
+        <pagination
+          :cur="cur"
+          :n="n"
+          :length="paymentsList.length"
+          @changePage="onChangePage"
+        />
       </div>
       <div :class="[$style.content]" v-if="showForm">
         <add-payment-form @addNewPayment="addData" />
@@ -18,20 +25,33 @@
 </template>
 
 <script>
+import { mapMutations, mapGetters, mapActions } from "vuex";
 import AddPaymentForm from "./components/AddPaymentForm.vue";
+import Pagination from "./components/Pagination.vue";
 import PaymentsDisplay from "./components/PaymentsDisplay.vue";
 export default {
   name: "App",
-  components: { PaymentsDisplay, AddPaymentForm },
+  components: { PaymentsDisplay, AddPaymentForm, Pagination },
   data() {
     return {
-      paymentList: [],
+      // paymentList: [],
       showForm: false,
+      cur: 1,
+      n: 5,
     };
   },
   methods: {
+    ...mapMutations({
+      loadData: "setPaymentListData",
+      addDataToStore: "addDataPaymentList",
+    }),
+    ...mapActions({ fetchListData: "fetchData" }),
     addData(newPayment) {
-      this.paymentList.push(newPayment);
+      // this.paymentList.push(newPayment);
+      this.addDataToStore(newPayment);
+    },
+    onChangePage(page) {
+      this.cur = page;
     },
     fetchData() {
       return [
@@ -53,8 +73,23 @@ export default {
       ];
     },
   },
+  computed: {
+    ...mapGetters({ paymentsList: "getPaymentsList" }),
+    getFPV() {
+      return this.$store.getters.getFullPaymentValue;
+    },
+    currentEl() {
+      const { n, cur } = this;
+      return this.paymentsList.slice(n * (cur - 1), n * (cur - 1) + n);
+    },
+  },
   created() {
-    this.paymentList = this.fetchData();
+    // this.paymentList = this.fetchData();
+    // this.$store.commit("setPaymentListData", this.fetchData());
+    // this.setPaymentListData(this.fetchData()); // с импортом мутаций
+    // this.loadData(this.fetchData()); // с присваиванием своего имени мутации
+    // this.$store.dispatch("fetchData");
+    this.fetchListData();
   },
 };
 </script>
