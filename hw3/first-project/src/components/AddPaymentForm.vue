@@ -30,7 +30,7 @@ export default {
   methods: {
     onSave() {
       const data = {
-        date: this.date || this.getCurrentDate(),
+        date: this.date || this.getCurrentDate,
         value: +this.value,
         category: this.category,
       };
