@@ -41,10 +41,11 @@ export default {
     ...mapActions(["fetchCategoryList"]),
     onSave() {
       const data = {
-        // id: this.paymentsList.length,
+        
         date: this.date || this.getCurrentDate,
         value: +this.value,
         category: this.category,
+        id: this.paymentsList.length,
       };
       this.$emit("addNewPayment", data);
     },
